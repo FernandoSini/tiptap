@@ -12,6 +12,7 @@ class WebHomeScreen extends StatefulWidget {
 
 class _WebHomeScreenState extends State<WebHomeScreen> {
   String? data;
+  final scrollController = ScrollController();
   Future<String?> getData() async {
     data = await "maconha das brabas";
 
@@ -25,8 +26,10 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       future: getData(),
       builder: (context, snapshot) {
         return AnimatedSwitcher(
-          reverseDuration: const Duration(seconds: 5),
-          duration: const Duration(seconds: 5),
+          // reverseDuration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 10),
+          switchInCurve: Curves.elasticIn,
+          switchOutCurve: Curves.elasticOut,
           // switchInCurve: Curves.easeOut,
           child: snapshot.connectionState == ConnectionState.waiting
               ? Container(
@@ -56,21 +59,35 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                         )
                       : CustomScrollBar(
                           floatingLeftBar: const FloatingLeftBar(),
-                          scrollController: ScrollController(),
+                          scrollController: scrollController,
                           widgetToScroll: Container(
                             height: screenSize.height,
+                            width: screenSize.width,
                             alignment: Alignment.center,
                             color: Colors.yellow,
                             child: SingleChildScrollView(
-                              controller: ScrollController(),
+                              physics: const BouncingScrollPhysics(),
+                              controller: scrollController,
                               child: snapshot.data == null
                                   ? const Align(
                                       alignment: Alignment.center,
                                       child: Text("is null"),
                                     )
-                                  : Align(
-                                      alignment: Alignment.center,
-                                      child: Text("has Data ${snapshot.data}"),
+                                  : Column(
+                                      children: [
+                                        SizedBox(
+                                          height: screenSize.height * 0.5,
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                                "has Data ${snapshot.data}"),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: screenSize.height * 0.7,
+                                          color: Colors.blue,
+                                        )
+                                      ],
                                     ),
                             ),
                           ),

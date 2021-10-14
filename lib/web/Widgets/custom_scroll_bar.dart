@@ -20,13 +20,21 @@ class _CustomScrollBarState extends State<CustomScrollBar> {
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
-      interactive: true,
+      // interactive: true,
+      isAlwaysShown: true, interactive: true,
+      controller: widget.scrollController,
+      showTrackOnHover: true, hoverThickness: 5,
+      thickness: 7,
+      radius: const Radius.circular(20),
       child: Stack(
         children: [
           widget.widgetToScroll!,
-          Align(
-            alignment: Alignment.centerRight,
-            child: widget.floatingLeftBar,
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: widget.floatingLeftBar,
+            ),
           ),
         ],
       ),
