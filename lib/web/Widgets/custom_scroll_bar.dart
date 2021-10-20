@@ -19,12 +19,24 @@ class CustomScrollBar extends StatefulWidget {
 class _CustomScrollBarState extends State<CustomScrollBar> {
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    return Stack(
+      children: [
+        widget.widgetToScroll!,
+        Container(
+          padding: const EdgeInsets.only(right: 10),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: widget.floatingLeftBar,
+          ),
+        ),
+      ],
+    );
+    /* return Scrollbar(
       // interactive: true,
-      isAlwaysShown: true, interactive: true,
+      isAlwaysShown: true, thickness: 20, interactive: true,
       controller: widget.scrollController,
       showTrackOnHover: true, hoverThickness: 5,
-      thickness: 7,
+
       radius: const Radius.circular(20),
       child: Stack(
         children: [
@@ -38,6 +50,6 @@ class _CustomScrollBarState extends State<CustomScrollBar> {
           ),
         ],
       ),
-    );
+    ); */
   }
 }
