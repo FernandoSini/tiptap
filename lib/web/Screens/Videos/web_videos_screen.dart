@@ -6,6 +6,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:tiptap/web/Widgets/app_bar_widget.dart';
 import 'package:tiptap/web/Widgets/custom_scroll_bar.dart';
 import 'package:tiptap/web/Widgets/floating_left_bar.dart';
+import 'package:tiptap/web/Widgets/responsive.dart';
 import 'package:tiptap/web/Widgets/topbar_widget.dart';
 import 'package:tiptap/web/services/Api/youtube_services.dart';
 import 'package:youtube_api/youtube_api.dart';
@@ -134,19 +135,25 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                           shrinkWrap: true,
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(top: 20),
+                              // margin: const EdgeInsets.only(top: 20),
                               child: GridView.builder(
                                 itemCount: videos.length,
                                 shrinkWrap: true,
+                                padding:
+                                    const EdgeInsets.only(left: 5, right: 5),
                                 gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 0.9,
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio:
+                                      (Responsive.isMediumScreen(context) ||
+                                              Responsive.isSmallScreen(context))
+                                          ? 0.9
+                                          : 0.95,
                                   crossAxisCount: 5,
                                 ),
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    padding: const EdgeInsets.only(
-                                        left: 5, right: 5),
+                                    // padding: const EdgeInsets.only(
+                                    //     left: 5, right: 5),
                                     height: 600,
                                     child: Card(
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -177,7 +184,13 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                                                   fontSize: 13),
                                             ),
                                           ),
-                                          const SizedBox(height: 15),
+                                          if (Responsive.isMediumScreen(
+                                              context))
+                                            const SizedBox(
+                                              height: 5,
+                                            )
+                                          else
+                                            const SizedBox(height: 15),
                                           SizedBox(
                                             child: Text(
                                               "Transmitido dia: " +
@@ -190,9 +203,15 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                                                   ),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
+                                          if (Responsive.isMediumScreen(
+                                              context))
+                                            const SizedBox(
+                                              height: 5,
+                                            )
+                                          else
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
                                           SizedBox(
                                             height: screenSize.height * 0.05,
                                             width: screenSize.width * 0.15,
