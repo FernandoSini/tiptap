@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tiptap/web/Screens/Videos/web_videos_screen.dart';
+import 'package:tiptap/web/provider/login_provider.dart';
 import 'web/Screens/Home/web_home_screen.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
@@ -12,8 +14,17 @@ void main() {
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
 
-  configureApp();
-  runApp(const MyApp());
+  //configureApp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LoginProvider>(
+          create: (context) => LoginProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,8 +38,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       checkerboardOffscreenLayers: false,
       checkerboardRasterCacheImages: false,
-
+      // color: Colors.black,
       theme: ThemeData(
+        primaryColor: Colors.black,
         scrollbarTheme: ScrollbarThemeData(
             isAlwaysShown: true,
             showTrackOnHover: true,
@@ -37,6 +49,7 @@ class MyApp extends StatelessWidget {
             interactive: true),
       ),
       initialRoute: "/home",
+
       onGenerateRoute: kIsWeb
           ? (settings) {
               switch (settings.name) {
@@ -46,7 +59,7 @@ class MyApp extends StatelessWidget {
                     pageBuilder: (context, animation1, animation2) =>
                         const WebHomeScreen(),
                   );
-                  case "/podpahs":
+                case "/podpahs":
                   return PageRouteBuilder(
                     settings: settings,
                     pageBuilder: (context, animation1, animation2) =>

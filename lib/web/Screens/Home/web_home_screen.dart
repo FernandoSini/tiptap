@@ -5,6 +5,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:tiptap/web/Widgets/app_bar_widget.dart';
 import 'package:tiptap/web/Widgets/custom_scroll_bar.dart';
 import 'package:tiptap/web/Widgets/floating_left_bar.dart';
+import 'package:tiptap/web/Widgets/footer_widget.dart';
 import 'package:tiptap/web/Widgets/responsive.dart';
 import 'package:tiptap/web/Widgets/topbar_widget.dart';
 import 'package:video_player/video_player.dart';
@@ -46,7 +47,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController =
+    ScrollController? scrollController =
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
     var screenSize = MediaQuery.of(context).size;
     // return FutureBuilder(
@@ -136,9 +137,9 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     //   },
     // );
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBarWidget(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100),
+        child: AppBarWidget(scrollController: scrollController),
       ),
       extendBodyBehindAppBar: true,
       body: SizedBox(
@@ -268,9 +269,20 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                   ],
                                 ),
                                 Container(
-                                  height: screenSize.height * 0.4,
+                                  height: screenSize.height,
                                   width: screenSize.width,
-                                  color: Colors.black,
+                                  // color: Colors.black,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          "./assets/igaoemitico.jpeg"),
+                                      fit: BoxFit.fill,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.yellow,
+                                        BlendMode.darken,
+                                      ),
+                                    ),
+                                  ),
                                   child: Wrap(
                                     // alignment: WrapAlignment.spaceEvenly,
                                     runAlignment: WrapAlignment.center,
@@ -279,23 +291,33 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                       Column(
                                         children: [
                                           Container(
-                                            // color: Colors.red,
-                                            // margin: EdgeInsets.only(
-                                            //     left: Responsive.isSmallScreen(
-                                            //             context)
-                                            //         ? 50
-                                            //         : 200),
-                                            child: Text(
-                                              "Sobre nós",
-                                              style: TextStyle(
-                                                fontFamily: GoogleFonts.acme()
-                                                    .fontFamily,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 30,
-                                              ),
+                                              // color: Colors.red,
+                                              // margin: EdgeInsets.only(
+                                              //     left: Responsive.isSmallScreen(
+                                              //             context)
+                                              //         ? 50
+                                              //         : 200),
+
+                                              child: DefaultTextStyle(
+                                            style: TextStyle(
+                                              fontFamily:
+                                                  GoogleFonts.acme().fontFamily,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 50,
                                             ),
-                                          ),
+                                            child: AnimatedTextKit(
+                                              repeatForever: true,
+                                              animatedTexts: [
+                                                TypewriterAnimatedText(
+                                                  "Sobre nós",
+                                                  speed: const Duration(
+                                                    milliseconds: 100,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
                                           Container(
                                             // width: screenSize.width * 0.5,
                                             padding: EdgeInsets.only(
@@ -313,7 +335,10 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                               softWrap: true,
                                               textAlign: TextAlign.justify,
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -321,6 +346,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                     ],
                                   ),
                                 ),
+                                // const FooterWidget(),
                               ],
                             ),
                     ),

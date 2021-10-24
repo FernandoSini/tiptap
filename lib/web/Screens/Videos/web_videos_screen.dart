@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:tiptap/web/Widgets/app_bar_widget.dart';
 import 'package:tiptap/web/Widgets/custom_scroll_bar.dart';
 import 'package:tiptap/web/Widgets/floating_left_bar.dart';
 import 'package:tiptap/web/Widgets/topbar_widget.dart';
+import 'package:tiptap/web/services/Api/youtube_services.dart';
+import 'package:youtube_api/youtube_api.dart';
+import 'dart:html' as html;
 
 class WebVideosScreen extends StatefulWidget {
   const WebVideosScreen({Key? key}) : super(key: key);
@@ -15,7 +19,6 @@ class WebVideosScreen extends StatefulWidget {
 }
 
 class _WebVideosScreenState extends State<WebVideosScreen> {
-  Future getVideos() async {}
   @override
   Widget build(BuildContext context) {
     final scrollController =
@@ -28,11 +31,12 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
       ),
       body: SizedBox(
         child: FutureBuilder(
-          future: getVideos(),
+          future: YoutubeServices().getChannelVideos(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return AnimatedSwitcher(
                 // reverseDuration: const Duration(seconds: 3),
+                transitionBuilder: AnimatedSwitcher.defaultTransitionBuilder,
                 duration: const Duration(seconds: 10),
                 switchInCurve: Curves.elasticIn,
                 switchOutCurve: Curves.elasticOut,
@@ -64,6 +68,7 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                   ),
                 );
               } else {
+                List<YouTubeVideo> videos = snapshot.data as List<YouTubeVideo>;
                 return AnimatedSwitcher(
                   // transitionBuilder: AnimatedSwi,
                   duration: const Duration(seconds: 10),
@@ -111,17 +116,111 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                               controller: scrollController,
                               shrinkWrap: true,
                               children: [
-                                  SizedBox(
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 5),
-                                      itemBuilder: (context, index) {
-                                        return const Card();
-                                      },
+                                Container(
+                                  margin: const EdgeInsets.only(top: 20),
+                                  child: GridView.builder(
+                                    itemCount: videos.length,
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 0.9,
+                                      crossAxisCount: 5,
                                     ),
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 5, right: 5),
+                                        height: 600,
+                                        child: Card(
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(17)),
+                                          child: Column(
+                                            children: [
+                                              Image.network(videos[index]
+                                                  .thumbnail
+                                                  .medium
+                                                  .url!),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                  top: 10,
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                child: Text(
+                                                  videos[index].title,
+                                                  softWrap: true,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 15),
+                                              SizedBox(
+                                                child: Text(
+                                                  "Transmitido dia: " +
+                                                      DateFormat("dd/MM/yyyy")
+                                                          .format(
+                                                        DateTime.tryParse(videos[
+                                                                    index]
+                                                                .publishedAt!)!
+                                                            .toLocal(),
+                                                      ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    screenSize.height * 0.05,
+                                                width: screenSize.width * 0.15,
+                                                child: ElevatedButton(
+                                                  child: Text(
+                                                    "Assita agora!",
+                                                    softWrap: true,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.yellowAccent
+                                                          .shade700,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.black,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    html.window.open(
+                                                        videos[index].url,
+                                                        "podpah video");
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ]),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 );

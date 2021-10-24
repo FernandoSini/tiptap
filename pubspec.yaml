@@ -35,9 +35,13 @@ dependencies:
     sdk: flutter
   fluttericon: ^2.0.0
   google_fonts: ^2.1.0
+  http: ^0.13.4
+  intl: ^0.17.0
   loading_indicator: ^3.0.2
   provider: ^6.0.1
+  url_launcher: ^6.0.12
   video_player: ^2.2.5
+  youtube_api: ^1.0.4
 
 dev_dependencies:
   flutter_lints: ^1.0.0
@@ -62,6 +66,9 @@ flutter:
     - assets/logohayashi.png
     - assets/podpah.png
     - assets/podcastmaiszikadainternet.jpeg
+    - assets/igaoemitico.png
+    - assets/igaoemitico.jpeg
+    - assets/miticoeigao.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

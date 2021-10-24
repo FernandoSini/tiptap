@@ -6,14 +6,17 @@ import 'package:tiptap/web/Widgets/responsive.dart';
 import 'login_dialog.dart';
 
 class AppBarWidget extends StatefulWidget {
-  const AppBarWidget({Key? key}) : super(key: key);
+  const AppBarWidget({Key? key, this.scrollController, this.screenSizeHeight})
+      : super(key: key);
+  final ScrollController? scrollController;
+  final double? screenSizeHeight;
 
   @override
   _AppBarWidgetState createState() => _AppBarWidgetState();
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
-  List<bool> onHoverList = [false, false, false, false, false, false];
+  List<bool> onHoverList = [false, false, false, false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
         //     ? null
         //     : const EdgeInsets.only(top: 10, left: 10, right: 10),
         child: AppBar(
+          
           automaticallyImplyLeading: true,
           backgroundColor: Colors.black,
           // shape: Responsive.isSmallScreen(context)
@@ -70,7 +74,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
           title: Responsive.isSmallScreen(context)
               ? null
               : Container(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Wrap(
                     alignment: WrapAlignment.center,
                     children: [
@@ -80,14 +84,26 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                             onHoverList[1] = value;
                           });
                         },
-                        onTap: () {},
+                        onTap: ModalRoute.of(context)?.settings.name != "/home"
+                            ? () {
+                                Navigator.of(context)
+                                    .pushReplacementNamed("/home");
+                              }
+                            : () {
+                                widget.scrollController?.animateTo(
+                                    MediaQuery.of(context).size.height * 2,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastOutSlowIn);
+                              },
                         hoverColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         child: Container(
                           margin: const EdgeInsets.only(right: 20),
                           child: Text(
-                            "Sobre nós",
+                            ModalRoute.of(context)?.settings.name != "/home"
+                                ? "Home"
+                                : "Sobre nós",
                             style: TextStyle(
                                 color: !onHoverList[1]
                                     ? Colors.white
@@ -130,13 +146,38 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         child: Container(
+                          margin: const EdgeInsets.only(right: 20),
+                          child: Text(
+                            "Podpah's",
+                            style: TextStyle(
+                              color: !onHoverList[3]
+                                  ? Colors.white
+                                  : Colors.yellowAccent.shade700,
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed("/patrocinadores");
+                        },
+                        onHover: (value) {
+                          setState(() {
+                            onHoverList[4] = value;
+                          });
+                        },
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        child: Container(
                           margin: EdgeInsets.only(
                               right:
                                   Responsive.isSmallScreen(context) ? 20 : 40),
                           child: Text(
-                            "Podpahs",
+                            "Patrocinadores",
                             style: TextStyle(
-                              color: !onHoverList[3]
+                              color: !onHoverList[4]
                                   ? Colors.white
                                   : Colors.yellowAccent.shade700,
                             ),
@@ -157,6 +198,8 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     onTap: () {
                       showDialog(
                         context: context,
+                        //desativa o toque fora da caixa
+                        barrierDismissible: false,
                         builder: (builder) {
                           return const RegisterDialog();
                         },
@@ -164,7 +207,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     },
                     onHover: (value) {
                       setState(() {
-                        onHoverList[4] = value;
+                        onHoverList[5] = value;
                       });
                     },
                     hoverColor: Colors.transparent,
@@ -178,7 +221,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                             "Registrar",
                             style: TextStyle(
                                 fontSize: 20,
-                                color: !onHoverList[4]
+                                color: !onHoverList[5]
                                     ? Colors.white
                                     : Colors.yellowAccent.shade700),
                           ),
@@ -188,7 +231,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                           Icon(
                             FontAwesome.pencil,
                             size: 20,
-                            color: !onHoverList[4]
+                            color: !onHoverList[5]
                                 ? Colors.white
                                 : Colors.yellowAccent.shade700,
                           )
@@ -210,6 +253,8 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     onTap: () {
                       showDialog(
                         context: context,
+                        //desativa o toque fora da caixa
+                        barrierDismissible: false,
                         builder: (builder) {
                           return const LoginDialog();
                         },
@@ -217,7 +262,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     },
                     onHover: (value) {
                       setState(() {
-                        onHoverList[5] = value;
+                        onHoverList[6] = value;
                       });
                     },
                     hoverColor: Colors.transparent,
@@ -232,7 +277,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                             "Login",
                             style: TextStyle(
                                 fontSize: 20,
-                                color: !onHoverList[5]
+                                color: !onHoverList[6]
                                     ? Colors.white
                                     : Colors.yellowAccent.shade700),
                           ),
@@ -241,7 +286,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                           ),
                           Icon(
                             FontAwesome.login,
-                            color: !onHoverList[5]
+                            color: !onHoverList[6]
                                 ? Colors.white
                                 : Colors.yellowAccent.shade700,
                             size: 20,
