@@ -19,6 +19,7 @@ class WebVideosScreen extends StatefulWidget {
 }
 
 class _WebVideosScreenState extends State<WebVideosScreen> {
+  Future getData() async {}
   @override
   Widget build(BuildContext context) {
     final scrollController =
@@ -68,162 +69,172 @@ class _WebVideosScreenState extends State<WebVideosScreen> {
                   ),
                 );
               } else {
-                List<YouTubeVideo> videos = snapshot.data as List<YouTubeVideo>;
-                return AnimatedSwitcher(
-                  // transitionBuilder: AnimatedSwi,
-                  duration: const Duration(seconds: 10),
-                  switchInCurve: Curves.elasticIn,
-                  switchOutCurve: Curves.elasticOut,
-                  child: CustomScrollBar(
-                    floatingLeftBar: const FloatingLeftBar(),
-                    scrollController: scrollController,
-                    widgetToScroll: Container(
-                      height: screenSize.height,
-                      width: screenSize.width,
-                      color: Colors.yellowAccent.shade700,
-                      child: snapshot.data == null
-                          ? SizedBox(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    child: Icon(FontAwesome5.sad_cry,
-                                        color: Colors.black, size: 150),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Ainda não tem vídeo aqui",
-                                        softWrap: true,
-                                        textAlign: TextAlign.justify,
-                                        style: TextStyle(
-                                          fontFamily:
-                                              GoogleFonts.acme().fontFamily,
-                                          fontSize: 50,
-                                          color: Colors.black,
-                                          // fontWeight:FontWeight.bold
-                                        ),
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return AnimatedSwitcher(
+                    // transitionBuilder: AnimatedSwi,
+                    duration: const Duration(seconds: 10),
+                    switchInCurve: Curves.elasticIn,
+                    switchOutCurve: Curves.elasticOut,
+                    child: CustomScrollBar(
+                      floatingLeftBar: const FloatingLeftBar(),
+                      scrollController: scrollController,
+                      widgetToScroll: Container(
+                          height: screenSize.height,
+                          width: screenSize.width,
+                          color: Colors.yellowAccent.shade700,
+                          child: SizedBox(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  child: Icon(FontAwesome5.sad_cry,
+                                      color: Colors.black, size: 150),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Ainda não tem vídeo aqui",
+                                      softWrap: true,
+                                      textAlign: TextAlign.justify,
+                                      style: TextStyle(
+                                        fontFamily:
+                                            GoogleFonts.acme().fontFamily,
+                                        fontSize: 50,
+                                        color: Colors.black,
+                                        // fontWeight:FontWeight.bold
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView(
-                              physics: const BouncingScrollPhysics(),
-                              controller: scrollController,
-                              shrinkWrap: true,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(top: 20),
-                                  child: GridView.builder(
-                                    itemCount: videos.length,
-                                    shrinkWrap: true,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio: 0.9,
-                                      crossAxisCount: 5,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 5, right: 5),
-                                        height: 600,
-                                        child: Card(
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(17)),
-                                          child: Column(
-                                            children: [
-                                              Image.network(videos[index]
-                                                  .thumbnail
-                                                  .medium
-                                                  .url!),
-                                              const SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.only(
-                                                  top: 10,
-                                                  left: 10,
-                                                  right: 10,
-                                                ),
-                                                child: Text(
-                                                  videos[index].title,
-                                                  softWrap: true,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 15),
-                                              SizedBox(
-                                                child: Text(
-                                                  "Transmitido dia: " +
-                                                      DateFormat("dd/MM/yyyy")
-                                                          .format(
-                                                        DateTime.tryParse(videos[
-                                                                    index]
-                                                                .publishedAt!)!
-                                                            .toLocal(),
-                                                      ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    screenSize.height * 0.05,
-                                                width: screenSize.width * 0.15,
-                                                child: ElevatedButton(
-                                                  child: Text(
-                                                    "Assita agora!",
-                                                    softWrap: true,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.yellowAccent
-                                                          .shade700,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Colors.black,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    html.window.open(
-                                                        videos[index].url,
-                                                        "podpah video");
-                                                  },
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
                                   ),
                                 ),
                               ],
                             ),
+                          )),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  List<YouTubeVideo> videos =
+                      snapshot.data as List<YouTubeVideo>;
+                  return AnimatedSwitcher(
+                    // transitionBuilder: AnimatedSwi,
+                    duration: const Duration(seconds: 10),
+                    switchInCurve: Curves.elasticIn,
+                    switchOutCurve: Curves.elasticOut,
+                    child: CustomScrollBar(
+                      floatingLeftBar: const FloatingLeftBar(),
+                      scrollController: scrollController,
+                      widgetToScroll: Container(
+                        height: screenSize.height * 0.95,
+                        width: screenSize.width,
+                        color: Colors.yellowAccent.shade700,
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 20),
+                              child: GridView.builder(
+                                itemCount: videos.length,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  childAspectRatio: 0.9,
+                                  crossAxisCount: 5,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5),
+                                    height: 600,
+                                    child: Card(
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(17)),
+                                      child: Column(
+                                        children: [
+                                          Image.network(videos[index]
+                                              .thumbnail
+                                              .medium
+                                              .url!),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              top: 10,
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                            child: Text(
+                                              videos[index].title,
+                                              softWrap: true,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          SizedBox(
+                                            child: Text(
+                                              "Transmitido dia: " +
+                                                  DateFormat("dd/MM/yyyy")
+                                                      .format(
+                                                    DateTime.tryParse(
+                                                            videos[index]
+                                                                .publishedAt!)!
+                                                        .toLocal(),
+                                                  ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            height: screenSize.height * 0.05,
+                                            width: screenSize.width * 0.15,
+                                            child: ElevatedButton(
+                                              child: Text(
+                                                "Assita agora!",
+                                                softWrap: true,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors
+                                                      .yellowAccent.shade700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Colors.black,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                html.window.open(
+                                                    videos[index].url,
+                                                    "podpah video");
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
               }
             } else {
               return Container();
