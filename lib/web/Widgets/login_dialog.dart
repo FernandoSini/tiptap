@@ -14,10 +14,9 @@ class LoginDialog extends StatefulWidget {
 
 class _LoginDialogState extends State<LoginDialog> {
   bool isEnabled = false;
-  LoginController? loginController= LoginController();
+  LoginController? loginController = LoginController();
   @override
   void didChangeDependencies() {
-    
     super.didChangeDependencies();
   }
 
@@ -125,8 +124,10 @@ class _LoginDialogState extends State<LoginDialog> {
                         suffixIcon: Container(
                           margin: const EdgeInsets.only(right: 20),
                           child: IconButton(
-                            icon: const Icon(
-                              Icons.visibility,
+                            icon: Icon(
+                              !loginProvider.isVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                               size: 30,
                             ),
                             onPressed: () {
@@ -180,7 +181,6 @@ class _LoginDialogState extends State<LoginDialog> {
 
                         if (data!) {
                           Navigator.pop(context);
-                          
                         }
                         // if (!loginProvider.isLoading!) {
                         //   loginProvider.setLoading(true);

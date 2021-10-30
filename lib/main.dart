@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tiptap/web/Screens/Partners/web_partners_screen.dart';
+import 'package:tiptap/web/Screens/Store/web_store_screen.dart';
 import 'package:tiptap/web/Screens/Videos/web_videos_screen.dart';
 import 'package:tiptap/web/provider/login_provider.dart';
 import 'web/Screens/Home/web_home_screen.dart';
@@ -65,16 +67,18 @@ class MyApp extends StatelessWidget {
                     pageBuilder: (context, animation1, animation2) =>
                         const WebVideosScreen(),
                   );
-                // case "/aboutus":
-                //   return PageRouteBuilder(
-                //     settings: settings,
-                //     pageBuilder: (context, animation1, animation2) => AboutUsScreen(),
-                //   );
-                // case "/help":
-                //   return PageRouteBuilder(
-                //     settings: settings,
-                //     pageBuilder: (context, animation1, animation2) => HelpScreen(),
-                //   );
+                case "/store":
+                  return PageRouteBuilder(
+                    settings: settings,
+                    pageBuilder: (context, animation1, animation2) =>
+                        const WebStoreScreen(),
+                  );
+                case "/partners":
+                  return PageRouteBuilder(
+                    settings: settings,
+                    pageBuilder: (context, animation1, animation2) =>
+                        const WebPartnersScreen(),
+                  );
                 // case "/privacy":
                 //   return PageRouteBuilder(
                 //     settings: settings,
